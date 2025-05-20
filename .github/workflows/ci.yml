@@ -1,21 +1,30 @@
 name: Python CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '**'   # all branches
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-  python-tests:
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.x'
 
-      - name: Run dummy Python test
+      - name: Install dependencies
         run: |
-          echo "Running Python test..."
-          python -c "print('✅ Python CI is working!')"
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # or if you use pyproject.toml and poetry, add poetry install here
+
+      - name: Run tests with pytest
+        run: pytest
