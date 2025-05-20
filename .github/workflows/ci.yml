@@ -1,16 +1,21 @@
-name: Dummy CI
+name: Python CI
 
 on: [push, pull_request]
 
 jobs:
-  dummy-test:
+  python-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run fake test
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run dummy Python test
         run: |
-          echo "✅ CI is working without installing anything!"
-          exit 0
+          echo "Running Python test..."
+          python -c "print('✅ Python CI is working!')"
